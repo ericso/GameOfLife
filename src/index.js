@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Demo from "Demo";
+import Life from "Life";
 
 
-ReactDOM.render(<Demo />, document.getElementById("react-app"));
+ReactDOM.render(<Life />, document.getElementById("react-app"));
 
 if(module.hot) {
   module.hot.accept();

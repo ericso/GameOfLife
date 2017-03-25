@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
-    "test": "jest",
-    "lint": "eslint src",
-    "build": "cross-env NODE_ENV=production webpack --config webpack/webpack.config.production.js --progress --hide-modules -p"
+    "start": "yarn && node server.js",
+    "test": "yarn && jest",
+    "lint": "yarn && eslint src",
+    "build": "yarn && cross-env NODE_ENV=production webpack --config webpack/webpack.config.production.js --progress --hide-modules -p"
   },
   "keywords": [],
   "author": "",
