@@ -1,18 +1,13 @@
-#Introduction
+# GameOfLife
+Conway's [game of life](https://en.wikipedia.org/wiki/Conway's_Game_of_Life) implemented in React.
 
-This is a sample repository showing how to setup a React working environment
-from scratch. Currently implemented:
+# Installation
+```bash
+git clone git@github.com:ericso/GameOfLife.git
+cd GameOfLife
+yarn start # will ensure dependencies are installed
+```
 
-- babel with es2015 and React presets
-- webpack 2.2.x
-  - less, css, file-loaders with extract-text-webpack-plugin
-  - DirectoryNamed resolver plugin
-  - hot module replacement
-- jest 0.19
-  - enzyme
-- eslint
-  - eslint react rules
+If you do not have `yarn` installed, you can install it with `sudo npm install -g yarn`.
 
-#License
-
-MIT
+Open [http://localhost:8000](http://localhost:8000)
