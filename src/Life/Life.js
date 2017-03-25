@@ -15,6 +15,7 @@ export default class Life extends React.Component {
 
     this.state = {
       board: this.getSeedBoard(),
+      loopInterval: null,
     };
   }
 
@@ -28,11 +29,11 @@ export default class Life extends React.Component {
 
     let newBoard = [];
     for (let i = 0; i < this.boardInfo.rows; i++) {
-      let currentColumn = [];
+      let newColumn = [];
       for (let j = 0; j < this.boardInfo.columns; j++) {
-        currentColumn.push(randomBool(probability));
+        newColumn.push(randomBool(probability));
       }
-      newBoard.push(currentColumn);
+      newBoard.push(newColumn);
     }
     return newBoard;
   }
@@ -70,12 +71,126 @@ export default class Life extends React.Component {
     return rows;
   }
 
+  calculateNextState() {
+    const nextBoard = [];
+    for (let i = 0; i < this.boardInfo.rows; i++) {
+      let nextColumn = [];
+      for (let j = 0; j < this.boardInfo.columns; j++) {
+        nextColumn.push(this.shouldTileLiveOrDie(i, j));
+      }
+      nextBoard.push(nextColumn);
+    }
+    return nextBoard;
+  }
+
+ /**
+   * Determines whether or not the cell at index row, column is should be alive
+   * or dead at the next iteration.
+   *
+   * @method shouldTileLiveOrDie
+   * @param {Number} row - row index of the cell to be determined.
+   * @param {Number} column - column index of the cell to be determined.
+   * @return {Boolean} - true if the cell should be alive, false otherwise.
+   */
+  shouldTileLiveOrDie(row, column) {
+    // Count up living cells in the set of eight surrounding cells.
+    let count = 0;
+    if (this.cellIsAlive(row-1, column-1)) {
+      count++;
+    }
+    if (this.cellIsAlive(row-1, column)) {
+      count++;
+    }
+    if (this.cellIsAlive(row-1, column+1)) {
+      count++;
+    }
+    if (this.cellIsAlive(row, column-1)) {
+      count++;
+    }
+    if (this.cellIsAlive(row, column+1)) {
+      count++;
+    }
+    if (this.cellIsAlive(row+1, column-1)) {
+      count++;
+    }
+    if (this.cellIsAlive(row+1, column)) {
+      count++;
+    }
+    if (this.cellIsAlive(row+1, column+1)) {
+      count++;
+    }
+
+    let shouldLive;
+    if (this.cellIsAlive(row, column)) {
+      if (count < 2 || count > 3) {
+        shouldLive = false;
+      } else {
+        shouldLive = true;
+      }
+    } else {
+      if (count === 3) {
+        shouldLive = true;
+      } else {
+        shouldLive = false;
+      }
+    }
+    return shouldLive;
+  }
+
+  /**
+   * Checks if a cell is alive. If cell is out of bounds, it is considered dead.
+   * @method checkTile
+   * @param {Number} row - row index of the cell to be checked.
+   * @param {Number} column - column index of the cell to be checked.
+   * @return {Boolean} - true if the cell is alive, false if dead or out of bounds.
+   */
+  cellIsAlive(row, column) {
+    let alive;
+    try {
+      alive = this.state.board[row][column];
+    } catch(error) {
+      alive = false;
+    }
+    return alive;
+  }
+
+  renderPlayButton() {
+
+    const togglePause = (event) => {
+      console.log('toggling pause');
+
+      if (!this.state.loopInterval) {
+        const interval = setInterval(() => {
+          console.log('setting new state');
+
+          this.setState({board: this.calculateNextState()});
+        }, 50);
+        this.setState({loopInterval: interval});
+      } else {
+        clearInterval(this.state.loopInterval);
+        this.setState({loopInterval: null});
+      }
+    };
+
+    let buttonText = this.state.loopInterval ? 'Pause' : 'Play';
+
+    return (
+      <div
+        className={Style.playButton}
+        onClick={togglePause}
+      >
+        <p>{buttonText}</p>
+      </div>
+    )
+  }
+
   render() {
     const board = this.renderBoard()
-
+    const playButton = this.renderPlayButton()
     return (
       <div className={Style.Life}>
         {board}
+        {playButton}
       </div>
     )
   }
