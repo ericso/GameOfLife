@@ -14,7 +14,7 @@ export default class Life extends React.Component {
     };
 
     this.state = {
-      board: this.getSeedBoard(),
+      board: this.getSeedBoard('sparse'),
       loopInterval: null,
     };
   }
@@ -47,7 +47,7 @@ export default class Life extends React.Component {
 
         column.push(
           <div
-            key={j}
+            key={i + '-' + j}
             className={
               [
                 Style.column,
@@ -155,16 +155,11 @@ export default class Life extends React.Component {
   }
 
   renderPlayButton() {
-
     const togglePause = (event) => {
-      console.log('toggling pause');
-
       if (!this.state.loopInterval) {
         const interval = setInterval(() => {
-          console.log('setting new state');
-
           this.setState({board: this.calculateNextState()});
-        }, 50);
+        });
         this.setState({loopInterval: interval});
       } else {
         clearInterval(this.state.loopInterval);
