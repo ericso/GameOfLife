@@ -55,6 +55,16 @@ module.exports = [
     })(process.env.NODE_ENV)
   },
   {
+    test: /\.styl$/,
+    use: [
+      'style-loader',
+      'css-loader',
+      {
+        loader: 'stylus-loader'
+      },
+    ],
+  },
+  {
     test: /\.(ttf|woff|jpeg|jpg|png|gif|svg)$/,
     use: [
       {

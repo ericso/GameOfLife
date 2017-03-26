@@ -2,7 +2,8 @@
 
 import React from 'react';
 import {randomBool} from '../Util'
-import Style from './Life.less';
+import './Life.styl';
+
 
 type LifePropsType = {
   numRows: number,
@@ -73,8 +74,8 @@ export default class Life extends React.Component {
             key={i + '-' + j}
             className={
               [
-                Style.column,
-                this.state.board[i][j] ? Style.alive : Style.dead
+                'column',
+                this.state.board[i][j] ? 'alive' : 'dead'
               ].join(' ')
             }
           />
@@ -83,7 +84,7 @@ export default class Life extends React.Component {
       rows.push(
         <div
           key={i}
-          className={Style.row}
+          className='row'
         >
           {column}
         </div>
@@ -200,7 +201,7 @@ export default class Life extends React.Component {
 
     return (
       <div
-        className={Style.playButton}
+        className='playButton'
         onClick={togglePause}
       >
         <p>{buttonText}</p>
@@ -212,7 +213,7 @@ export default class Life extends React.Component {
     const board = this.renderBoard()
     const playButton = this.renderPlayButton()
     return (
-      <div className={Style.Life}>
+      <div className='life'>
         {board}
         {playButton}
       </div>
