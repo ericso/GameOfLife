@@ -1,36 +1,54 @@
+// @flow
+
 import React from 'react';
 import {randomBool} from '../Util'
 import Style from './Life.less';
 
+type LifePropsType = {
+  numRows: number,
+  numColumns: number,
+  seedDensity: string,
+};
+
+type LifeStateType = {
+  board: Array<Array<boolean>>,
+  loopIntervalId: ?number;
+};
 
 export default class Life extends React.Component {
 
-  constructor() {
-    super();
+  static instance: Life;
 
-    this.boardInfo = {
-      rows: 100,
-      columns: 100,
-    };
+  props: LifePropsType;
+  state: LifeStateType;
+
+  constructor(props: LifePropsType) {
+    super(props);
 
     this.state = {
       board: this.getSeedBoard('sparse'),
-      loopInterval: null,
+      loopIntervalId: null,
     };
   }
 
-  getSeedBoard(population) {
+  getSeedBoard() {
+    const {
+      numRows,
+      numColumns,
+      seedDensity,
+    } = this.props;
+
     let probability = null;
-    if (population === 'sparse') {
+    if (seedDensity === 'sparse') {
       probability = 'low';
-    } else if (population === 'crowded') {
+    } else if (seedDensity === 'crowded') {
       probability = 'high';
     }
 
     let newBoard = [];
-    for (let i = 0; i < this.boardInfo.rows; i++) {
+    for (let i = 0; i < numRows; i++) {
       let newColumn = [];
-      for (let j = 0; j < this.boardInfo.columns; j++) {
+      for (let j = 0; j < numColumns; j++) {
         newColumn.push(randomBool(probability));
       }
       newBoard.push(newColumn);
@@ -39,11 +57,16 @@ export default class Life extends React.Component {
   }
 
   renderBoard() {
+    const {
+      numRows,
+      numColumns,
+    } = this.props;
+
     const rows = [];
-    for (let i = 0; i < this.boardInfo.rows; i++) {
+    for (let i = 0; i < numRows; i++) {
 
       const column = [];
-      for (let j = 0; j < this.boardInfo.columns; j++) {
+      for (let j = 0; j < numColumns; j++) {
 
         column.push(
           <div
@@ -54,8 +77,7 @@ export default class Life extends React.Component {
                 this.state.board[i][j] ? Style.alive : Style.dead
               ].join(' ')
             }
-          >
-          </div>
+          />
         )
       }
       rows.push(
@@ -72,10 +94,15 @@ export default class Life extends React.Component {
   }
 
   calculateNextState() {
+    const {
+      numRows,
+      numColumns,
+    } = this.props;
+
     const nextBoard = [];
-    for (let i = 0; i < this.boardInfo.rows; i++) {
+    for (let i = 0; i < numRows; i++) {
       let nextColumn = [];
-      for (let j = 0; j < this.boardInfo.columns; j++) {
+      for (let j = 0; j < numColumns; j++) {
         nextColumn.push(this.shouldTileLiveOrDie(i, j));
       }
       nextBoard.push(nextColumn);
@@ -88,11 +115,11 @@ export default class Life extends React.Component {
    * or dead at the next iteration.
    *
    * @method shouldTileLiveOrDie
-   * @param {Number} row - row index of the cell to be determined.
-   * @param {Number} column - column index of the cell to be determined.
-   * @return {Boolean} - true if the cell should be alive, false otherwise.
+   * @param {number} row - row index of the cell to be determined.
+   * @param {number} column - column index of the cell to be determined.
+   * @return {boolean} - true if the cell should be alive, false otherwise.
    */
-  shouldTileLiveOrDie(row, column) {
+  shouldTileLiveOrDie(row: number, column: number) {
     // Count up living cells in the set of eight surrounding cells.
     let count = 0;
     if (this.cellIsAlive(row-1, column-1)) {
@@ -139,12 +166,14 @@ export default class Life extends React.Component {
 
   /**
    * Checks if a cell is alive. If cell is out of bounds, it is considered dead.
+   *
    * @method checkTile
-   * @param {Number} row - row index of the cell to be checked.
-   * @param {Number} column - column index of the cell to be checked.
-   * @return {Boolean} - true if the cell is alive, false if dead or out of bounds.
+   * @param {number} row - row index of the cell to be checked.
+   * @param {number} column - column index of the cell to be checked.
+   * @return {boolean} - true if the cell is alive, false if dead or out of
+   *     bounds.
    */
-  cellIsAlive(row, column) {
+  cellIsAlive(row: number, column: number) {
     let alive;
     try {
       alive = this.state.board[row][column];
@@ -156,14 +185,14 @@ export default class Life extends React.Component {
 
   renderPlayButton() {
     const togglePause = (event) => {
-      if (!this.state.loopInterval) {
-        const interval = setInterval(() => {
+      if (!this.state.loopIntervalId) {
+        const loopIntervalId = setInterval(() => {
           this.setState({board: this.calculateNextState()});
         });
-        this.setState({loopInterval: interval});
+        this.setState({loopIntervalId: loopIntervalId});
       } else {
-        clearInterval(this.state.loopInterval);
-        this.setState({loopInterval: null});
+        clearInterval(this.state.loopIntervalId);
+        this.setState({loopIntervalId: null});
       }
     };
 

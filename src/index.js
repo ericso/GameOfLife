@@ -3,7 +3,18 @@ import ReactDOM from "react-dom";
 import Life from "Life";
 
 
-ReactDOM.render(<Life />, document.getElementById("react-app"));
+const lifeProps = {
+  numRows: 100,
+  numColumns: 100,
+  seedDensity: 'sparse',
+}
+
+ReactDOM.render(
+  <Life
+    {...lifeProps}
+  />,
+  document.getElementById("react-app"),
+);
 
 if(module.hot) {
   module.hot.accept();
