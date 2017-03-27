@@ -13,7 +13,7 @@ If you do not have `yarn` installed, you can install it with `sudo npm install -
 Open [http://localhost:8000](http://localhost:8000)
 
 To Do:
-- [ ] abstract cell into component
+- [x] abstract cell into component
 - [ ] editing mode: clicking a cell populates it
   - [ ] stamps for common structures (oscillators, spaceships, guns, etc.)
 - [ ] history
