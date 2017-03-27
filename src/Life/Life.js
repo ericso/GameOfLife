@@ -3,6 +3,7 @@
 import React from 'react';
 import {randomBool} from '../Util'
 import './Life.styl';
+import Cell from './Cell';
 
 
 type LifePropsType = {
@@ -70,17 +71,15 @@ export default class Life extends React.Component {
       for (let j = 0; j < numColumns; j++) {
 
         column.push(
-          <div
-            key={i + '-' + j}
-            className={
-              [
-                'column',
-                this.state.board[i][j] ? 'alive' : 'dead'
-              ].join(' ')
-            }
-          />
+          <div className='column'>
+            <Cell
+              key={i+'-'+j}
+              alive={this.state.board[i][j]}
+            />
+          </div>
         )
       }
+
       rows.push(
         <div
           key={i}
