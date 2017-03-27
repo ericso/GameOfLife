@@ -69,14 +69,11 @@ export default class Life extends React.Component {
 
       const column = [];
       for (let j = 0; j < numColumns; j++) {
-
         column.push(
-          <div className='column'>
-            <Cell
-              key={i+'-'+j}
-              alive={this.state.board[i][j]}
-            />
-          </div>
+          <Cell
+            key={i+'-'+j}
+            alive={this.state.board[i][j]}
+          />
         )
       }
 
@@ -196,7 +193,7 @@ export default class Life extends React.Component {
       }
     };
 
-    let buttonText = this.state.loopInterval ? 'Pause' : 'Play';
+    let buttonText = this.state.loopIntervalId ? 'Pause' : 'Play';
 
     return (
       <div
